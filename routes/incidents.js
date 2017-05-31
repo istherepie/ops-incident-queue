@@ -28,13 +28,22 @@ router.get('/all', listIncidents, (req, res) => {
 
 // Create new incident
 router.put('/create', (req, res) => {
-	if (!req.body.incident) {
+	if (!req.body) {
 		return res.status(400).json({ error: 'Invalid request' })
 	}
 
-	client.hset(key, Date.now(), req.body.incident)
+	let payload = {
+		host: req.body.host,
+		alias: req.body.alias,
+		address: req.body.address,
+		state: req.body.state,
+		time: req.body.time,
+		info: req.body.info
+	}
 
-	res.json({ request: 'ok', incidents: req.body.incident })
+	client.hset(key, Date.now(), payload)
+
+	res.status(200)
 })
 
 // Export
